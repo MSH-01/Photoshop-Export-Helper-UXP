@@ -1,5 +1,6 @@
 let chosenFolder = "";
 const fs = require('uxp').storage.localFileSystem;
+let folderList = [];
 
 async function pickWorkingDirectory(){
   //const app = require('photoshop').app;
@@ -19,7 +20,9 @@ async function createImageFolder(){
     document.getElementById("warning-lbl").innerHTML = "Pick a working directory";
   }else{
     try{
-      const myCollectionsFolder = await chosenFolder.createFolder("collections");
+      for(let i = 0; i<numberOfFolders; i++){
+        folderList.push(createDirectory(chosenFolder,i));
+      }
       document.getElementById("warning-lbl").innerHTML = "Folders Successfully Created.";
     }catch{
       document.getElementById("warning-lbl").innerHTML = "Something went wrong.";
@@ -27,7 +30,11 @@ async function createImageFolder(){
   }
 }
 
-
+async function createDirectory(path, folderName){
+  const myCollectionsFolder = await path.createFolder("img"+folderName);
+  console.log("Created Folder")
+  return myCollectionsFolder;
+}
 
 
 document.getElementById("pick-directory-btn").addEventListener("click", pickWorkingDirectory);
