@@ -1,6 +1,6 @@
-# Starter Photoshop Plugin (Vanilla)
+# Photoshop Batch Export Helper
 
-This starter plugin is a good place to get started when developing for Photoshop. It does not rely on any frameworks or build steps -- hence the name "Vanilla".
+This plugin is designed to help with batch image processing. You will be asked to enter a number of folders based on how many image placeholders there are in your template. Then you should place the images that you want in the respective folders, and hit the 'Create CSV' button which is able to be imported into Photoshop.
 
 ## Load into Photoshop
 
