@@ -16,7 +16,7 @@
       "id": "vanilla",
       "minimumSize": {
         "width": 230,
-        "height": 200
+        "height": 320
       },
       "maximumSize": {
         "width": 2000,
@@ -24,11 +24,11 @@
       },
       "preferredDockedSize": {
         "width": 230,
-        "height": 300
+        "height": 320
       },
       "preferredFloatingSize": {
         "width": 230,
-        "height": 300
+        "height": 320
       },
       "icons": [
         {

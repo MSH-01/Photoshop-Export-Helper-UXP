@@ -1,9 +1,10 @@
 let chosenFolder = "";
-const fs = require('uxp').storage.localFileSystem;
 let folderList = [];
+const fs = require('uxp').storage.localFileSystem;
+const app = require('photoshop').app;
+
 
 async function pickWorkingDirectory(){
-  //const app = require('photoshop').app;
   let folder = await fs.getFolder();
   let token = fs.createSessionToken(folder);
   console.log(token);

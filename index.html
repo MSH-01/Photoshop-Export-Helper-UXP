@@ -10,23 +10,24 @@
   <sp-divider size="medium"></sp-divider>
   <div style="padding-top:10px ;">
     <sp-action-button style="width:100% ;">Create CSV</sp-action-button>
+    <sp-action-button style="background-color: #ed3e3e; padding-bottom: 10px;width: 100%;">Reset Directories</sp-action-button>
   </div>
   <div style="padding-top:10px ;">
     <sp-label>UTILITY</sp-label>
     <sp-divider size="small"></sp-divider>
     <div>
-      <div>
+      <div style="text-overflow: ellipsis;">
         <sp-label><b>Your working directory:</b></sp-label>
-        <sp-label id="directory-lbl">No directory selected...</sp-label>
+        <sp-body id="directory-lbl" size="xs">No directory selected...</sp-body>
       </div>
       <sp-action-button size="s" id="pick-directory-btn">Choose Working Directory</sp-action-button>
-      <div style="display:flex ;padding-top: 5px;">
+      <div style="display:flex ;padding-top: 5px; width: 100%;">
         <sp-textfield id="image-folder-no" type="number" placeholder="#s image folders"></sp-textfield>
         <sp-action-button id="create-directory-btn">Create</sp-action-button>
       </div>
       <sp-detail size="s" weight="light" id="warning-lbl" style="padding-top:5px;"></sp-detail>
       <div style="padding-top:5px ;">
-        <sp-action-button style="background-color: #ed3e3e; padding-bottom: 10px;">Reset Directories</sp-action-button>
+        
       </div>
     </div>
   </div>
