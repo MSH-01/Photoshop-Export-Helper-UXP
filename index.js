@@ -3,6 +3,16 @@ let folderList = [];
 const fs = require('uxp').storage.localFileSystem;
 const app = require('photoshop').app;
 
+async function resetDirectories(){
+  if(folderList.length == 0){
+    document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] No folders to delete.";
+  }else{
+    for(let i = 0; i<folderList.length;i++){
+      console.log("trying to delete a folder");
+      console.log(folderList[i]);
+    }
+  }
+}
 
 async function pickWorkingDirectory(){
   let folder = await fs.getFolder();
@@ -45,5 +55,8 @@ function getTime(){
   return time
 }
 
+
+
 document.getElementById("pick-directory-btn").addEventListener("click", pickWorkingDirectory);
 document.getElementById("create-directory-btn").addEventListener("click", createImageFolder);
+document.getElementById("reset-directories-btn").addEventListener("click", resetDirectories);
