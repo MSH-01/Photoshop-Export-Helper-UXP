@@ -31,6 +31,7 @@ async function createImageFolder(){
 }
 
 async function createDirectory(path, folderName){
+  folderName = parseInt(folderName) + 1
   const myCollectionsFolder = await path.createFolder("img"+folderName);
   console.log("Created Folder")
   return myCollectionsFolder;
