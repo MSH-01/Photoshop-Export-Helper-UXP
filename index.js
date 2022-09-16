@@ -15,12 +15,16 @@ async function createImageFolder(){
   let numberOfFolders = document.getElementById("image-folder-no").value;
   if(numberOfFolders == "" || 0){
     document.getElementById("warning-lbl").innerHTML = "Enter number of folders";
-  }else if(chosenPath == ""){
+  }else if(chosenFolder == ""){
     document.getElementById("warning-lbl").innerHTML = "Pick a working directory";
   }else{
-    document.getElementById("warning-lbl").innerHTML = numberOfFolders;
+    try{
+      const myCollectionsFolder = await chosenFolder.createFolder("collections");
+      document.getElementById("warning-lbl").innerHTML = "Folders Successfully Created.";
+    }catch{
+      document.getElementById("warning-lbl").innerHTML = "Something went wrong.";
+    }
   }
-
 }
 
 
