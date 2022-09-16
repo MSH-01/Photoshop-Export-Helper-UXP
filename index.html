@@ -19,11 +19,12 @@
         <sp-label><b>Your working directory:</b></sp-label>
         <sp-label id="directory-lbl">No directory selected...</sp-label>
       </div>
-      <sp-action-button id="pick-directory-btn">Choose Working Directory</sp-action-button>
+      <sp-action-button size="s" id="pick-directory-btn">Choose Working Directory</sp-action-button>
       <div style="display:flex ;padding-top: 5px;">
-        <sp-textfield type="number" placeholder="#s image folders"></sp-textfield>
-        <sp-action-button>Create</sp-action-button>
+        <sp-textfield id="image-folder-no" type="number" placeholder="#s image folders"></sp-textfield>
+        <sp-action-button id="create-directory-btn">Create</sp-action-button>
       </div>
+      <sp-detail size="s" weight="light" id="warning-lbl"></sp-detail>
       <div style="padding-top:5px ;">
         <sp-action-button style="background-color: #ed3e3e; padding-bottom: 10px;">Reset Directories</sp-action-button>
       </div>
