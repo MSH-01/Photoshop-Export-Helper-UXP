@@ -1,0 +1,7 @@
+{
+  "name": "photoshop-batch-export-helper",
+  "version": "1.0.0",
+  "description": "Helps with batch image processing",
+  "author": "Mohammed Hussain",
+  "license": "Apache-2.0"
+}
