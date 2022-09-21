@@ -22,10 +22,12 @@ async function resetDirectories(){
   }
 }
 
-function writeCSV(){
+async function writeCSV(){
   console.log("Write CSV")
   for(let i = 0;i<folderList.length;i++){
     console.log(getFolderEntries(folderList[i]));
+    let myNovelTxtFile = await chosenFolder.createFile("variables.csv");
+    myNovelTxtFile.write("hello");
   }
 }
 
@@ -70,6 +72,8 @@ function getTime(){
 async function getFolderEntries(currentFolder){
   const entries = await currentFolder.getEntries();
   return entries.filter(entry => entry.isFile);
+  
+  
 }
 
 document.getElementById("create-csv-btn").addEventListener("click", writeCSV);
