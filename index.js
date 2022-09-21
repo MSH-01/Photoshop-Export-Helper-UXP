@@ -10,6 +10,7 @@ async function resetDirectories(){
     for(let i = 0; i<folderList.length;i++){
       console.log("trying to delete a folder");
       console.log(folderList[i]);
+
     }
   }
 }
@@ -18,7 +19,6 @@ async function pickWorkingDirectory(){
   let folder = await fs.getFolder();
   let token = fs.createSessionToken(folder);
   console.log(token);
-  console.log(folder);
   document.getElementById("directory-lbl").innerHTML = folder.nativePath;
   chosenFolder = folder;
 }
