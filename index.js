@@ -43,7 +43,9 @@ function getLinesToWrite(){
   for(let i =0;i<folderList.length;i++){
     console.log(folderList[i]);
     getFolderContents(folderList[i]);
+    
   }
+  writeLines(folderContents);
   
 }
 
@@ -86,10 +88,16 @@ function getTime(){
 }
 
 async function writeCSV(){
-  let csvFile = await chosenFolder.createFile("variables.csv");
-  csvFile.write("hello");
   console.log("CSV Created.");
   getLinesToWrite();
+}
+
+async function writeLines(data){
+  console.log("Inside Write Lines");
+  let csvFile = await chosenFolder.createFile("variables.csv");
+  console.log(data);
+  let dummyData = [['a','b','c'],['1','2','3']];
+  csvFile.write(dummyData);
 }
 
 document.getElementById("create-csv-btn").addEventListener("click", writeCSV);
