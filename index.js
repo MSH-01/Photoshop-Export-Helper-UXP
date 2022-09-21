@@ -7,10 +7,17 @@ async function resetDirectories(){
   if(folderList.length == 0){
     document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] No folders to delete.";
   }else{
-    for(let i = 0; i<folderList.length;i++){
-      console.log("trying to delete a folder");
-      console.log(folderList[i]);
+    try{
+      for(let i = 0; i<folderList.length;i++){
+        console.log("trying to delete a folder");
+        let currentFolder = folderList[i];
+        console.log(currentFolder.nativePath);
+        currentFolder.delete();
+        document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Img folders successfully deleted.";
 
+      }
+    }catch{
+      document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Something went wrong.";
     }
   }
 }
@@ -32,7 +39,7 @@ async function createImageFolder(){
   }else{
     try{
       for(let i = 0; i<numberOfFolders; i++){
-        folderList.push(createDirectory(chosenFolder,i));
+        createDirectory(chosenFolder,i);
       }
       document.getElementById("image-folder-no").value = "";
       document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Folders Successfully Created.";
@@ -45,8 +52,7 @@ async function createImageFolder(){
 async function createDirectory(path, folderName){
   folderName = parseInt(folderName) + 1;
   const myCollectionsFolder = await path.createFolder("img"+folderName);
-  console.log("Created Folder");
-  return myCollectionsFolder;
+  folderList.push(myCollectionsFolder);
 }
 
 function getTime(){
