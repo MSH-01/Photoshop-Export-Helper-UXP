@@ -9,23 +9,29 @@ async function resetDirectories(){
   }else{
     try{
       for(let i = 0; i<folderList.length;i++){
-        console.log("trying to delete a folder");
         let currentFolder = folderList[i];
-        console.log(currentFolder.nativePath);
+        console.log("Deleting: " + currentFolder.nativePath);
         currentFolder.delete();
-        document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Img folders successfully deleted.";
-
       }
+      document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Img folders successfully deleted.";
+      folderList = [];
+
     }catch{
       document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Something went wrong.";
     }
   }
 }
 
+function writeCSV(){
+  console.log("Write CSV")
+  for(let i = 0;i<folderList.length;i++){
+    console.log(getFolderEntries(folderList[i]));
+  }
+}
+
 async function pickWorkingDirectory(){
   let folder = await fs.getFolder();
   let token = fs.createSessionToken(folder);
-  console.log(token);
   document.getElementById("directory-lbl").innerHTML = folder.nativePath;
   chosenFolder = folder;
 }
@@ -61,8 +67,12 @@ function getTime(){
   return time
 }
 
+async function getFolderEntries(currentFolder){
+  const entries = await currentFolder.getEntries();
+  return entries.filter(entry => entry.isFile);
+}
 
-
+document.getElementById("create-csv-btn").addEventListener("click", writeCSV);
 document.getElementById("pick-directory-btn").addEventListener("click", pickWorkingDirectory);
 document.getElementById("create-directory-btn").addEventListener("click", createImageFolder);
 document.getElementById("reset-directories-btn").addEventListener("click", resetDirectories);
