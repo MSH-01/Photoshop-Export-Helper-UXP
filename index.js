@@ -1,5 +1,6 @@
 let chosenFolder = "";
 let folderList = [];
+let folderContents = [];
 const fs = require('uxp').storage.localFileSystem;
 const app = require('photoshop').app;
 
@@ -22,13 +23,28 @@ async function resetDirectories(){
   }
 }
 
-async function writeCSV(){
-  console.log("Write CSV")
-  for(let i = 0;i<folderList.length;i++){
-    console.log(getFolderEntries(folderList[i]));
-    let myNovelTxtFile = await chosenFolder.createFile("variables.csv");
-    myNovelTxtFile.write("hello");
+async function getFolderContents(myFolder){
+  console.log("Inside getFolderContents");
+  const entries = await myFolder.getEntries();
+  const allFiles = entries.filter(entry => entry.isFile);
+  console.log(allFiles);
+  let currentFolder = []
+  for(let i = 0; i<allFiles.length;i++){
+    currentFolder.push(allFiles[i].name);
   }
+  folderContents.push(currentFolder);
+  console.log("Finished for loop");
+  console.log(currentFolder);
+  console.log(folderContents);
+}
+
+function getLinesToWrite(){
+  console.log("writing lines");
+  for(let i =0;i<folderList.length;i++){
+    console.log(folderList[i]);
+    getFolderContents(folderList[i]);
+  }
+  
 }
 
 async function pickWorkingDirectory(){
@@ -69,11 +85,11 @@ function getTime(){
   return time
 }
 
-async function getFolderEntries(currentFolder){
-  const entries = await currentFolder.getEntries();
-  return entries.filter(entry => entry.isFile);
-  
-  
+async function writeCSV(){
+  let csvFile = await chosenFolder.createFile("variables.csv");
+  csvFile.write("hello");
+  console.log("CSV Created.");
+  getLinesToWrite();
 }
 
 document.getElementById("create-csv-btn").addEventListener("click", writeCSV);
