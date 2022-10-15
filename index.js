@@ -20,7 +20,7 @@ async function resetDirectories(){
     try{
       for(let i = 0; i<folderList.length;i++){
         let currentFolder = folderList[i];
-        console.log("Deleting: " + currentFolder.nativePath);
+        console.log("[WARN] Deleting: " + currentFolder.nativePath);
         currentFolder.delete();
       }
       document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Img folders successfully deleted.";
@@ -37,18 +37,14 @@ async function resetDirectories(){
  * @myFolder current folder
  */
 async function getFolderContents(myFolder){
-  console.log("Inside getFolderContents");
+  console.log("[INFO] Inside getFolderContents: " + myFolder);
   const entries = await myFolder.getEntries();
   const allFiles = entries.filter(entry => entry.isFile);
-  console.log(allFiles);
   let currentFolder = []
   for(let i = 0; i<allFiles.length;i++){
-    currentFolder.push(allFiles[i].name);
+    currentFolder.push(myFolder.name+"/"+allFiles[i].name);
   }
   folderContents.push(currentFolder);
-  console.log("Finished for loop");
-  console.log(currentFolder);
-  console.log(folderContents);
 }
 
 /**
@@ -56,10 +52,9 @@ async function getFolderContents(myFolder){
  */
 function getLinesToWrite(){
   // console log
-  console.log("writing lines");
+  console.log("[INFO] Inside getLinesToWrite");
   // loop through folder list and call getFolderContents on each folder
   for(let i =0;i<folderList.length;i++){
-    console.log(folderList[i]);
     getFolderContents(folderList[i]);
     
   }
@@ -122,7 +117,7 @@ function getTime(){
  * logs and calls getLinesToWrite.
  */
 async function writeCSV(){
-  console.log("CSV Created.");
+  console.log("[INFO] CSV Created.");
   getLinesToWrite();
 }
 
@@ -131,14 +126,27 @@ async function writeCSV(){
  * @data the data to be written to CSV
  */
 async function writeLines(data){
-  console.log("Inside Write Lines");
+  console.log("[INFO] Creating CSV file.");
   let csvFile = await chosenFolder.createFile("variables.csv");
-  console.log(data);
-  let dummyData = [['a','b','c'],['1','2','3']];
-  csvFile.write(dummyData);
+  let folderNames = [];
+  for(let i=0;i<folderList.length;i++){
+    folderNames.push("Image"+(i+1));
+  }
+  await csvFile.write(folderNames);
+  await csvFile.write("\n", {append : true});
+  await csvFile.write(data[0], {append : true});
+  await csvFile.write("\n", {append : true});
+  await csvFile.write(data[1], {append : true});
 }
 
-document.getElementById("create-csv-btn").addEventListener("click", writeCSV);
-document.getElementById("pick-directory-btn").addEventListener("click", pickWorkingDirectory);
-document.getElementById("create-directory-btn").addEventListener("click", createImageFolder);
-document.getElementById("reset-directories-btn").addEventListener("click", resetDirectories);
+/**
+ * assigns functions to the UI buttons.
+ */
+function assignFunctions(){
+  document.getElementById("create-csv-btn").addEventListener("click", writeCSV);
+  document.getElementById("pick-directory-btn").addEventListener("click", pickWorkingDirectory);
+  document.getElementById("create-directory-btn").addEventListener("click", createImageFolder);
+  document.getElementById("reset-directories-btn").addEventListener("click", resetDirectories);
+}
+
+assignFunctions();
