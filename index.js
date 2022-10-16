@@ -7,7 +7,7 @@ let folderContents = [];
 
 // uxp definitions
 const fs = require('uxp').storage.localFileSystem;
-const app = require('photoshop').app;
+// const app = require('photoshop').app;
 
 
 /**
@@ -21,8 +21,16 @@ async function resetDirectories(){
       for(let i = 0; i<folderList.length;i++){
         let currentFolder = folderList[i];
         console.log("[WARN] Deleting: " + currentFolder.nativePath);
+        let currentFolderEntries = await currentFolder.getEntries();
+        console.log("[INFO] "+ currentFolderEntries);
+        for(let j = 0;j<currentFolderEntries.length;j++){
+          currentFolderEntries[j].delete();
+          console.log("[INFO] " + currentFolderEntries[i]);
+        }
         currentFolder.delete();
       }
+      let csvFile = await chosenFolder.getEntry("variables.csv");
+      csvFile.delete();
       document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Img folders successfully deleted.";
       folderList = [];
 
@@ -33,7 +41,7 @@ async function resetDirectories(){
 }
 
 /**
- * creates list of folder contents from folder parameter.
+ * Creates list of folder contents from folder parameter.
  * @myFolder current folder
  */
 async function getFolderContents(myFolder){
@@ -49,7 +57,7 @@ async function getFolderContents(myFolder){
 }
 
 /**
- * allows user to select their directory.
+ * Allows user to select their directory.
  */
 async function pickWorkingDirectory(){
   let folder = await fs.getFolder();
@@ -59,7 +67,7 @@ async function pickWorkingDirectory(){
 }
 
 /**
- * loops through number submitted by user and calls createDirectory for each.
+ * Loops through number submitted by user and calls createDirectory for each.
  */
 async function createImageFolder(){
   let numberOfFolders = document.getElementById("image-folder-no").value;
@@ -81,7 +89,9 @@ async function createImageFolder(){
 }
 
 /**
- * creates a new folder with name img + (number in loop).
+ * Creates a new folder with name img + (number in loop).
+ * @path where folder will be created
+ * @folderName number of folder
  */
 async function createDirectory(path, folderName){
   folderName = parseInt(folderName) + 1;
@@ -90,7 +100,7 @@ async function createDirectory(path, folderName){
 }
 
 /**
- * returns current time.
+ * Returns current time.
  */
 function getTime(){
   var today = new Date();
@@ -98,9 +108,8 @@ function getTime(){
   return time
 }
 
-
 /**
- * loops through list of folders and gets folder contents. Then calls writeLines with collated folderContents.
+ * Loops through list of folders and gets folder contents. Then calls writeLines with collated folderContents.
  */
  function createFolderContentList(){
   // console log
@@ -115,41 +124,46 @@ function getTime(){
   
 }
 
-
 /**
- * creates and writes lines to CSV
+ * Creates and writes lines to CSV.
  * @data the data to be written to CSV
  */
 async function writeLines(data){
-  console.log("[INFO] Creating CSV file.");
-  let csvFile = await chosenFolder.createFile("variables.csv");
-  let csvHeading = [];
-  for(let i=0;i<folderList.length;i++){
-    csvHeading.push("Image"+(i+1));
-  }
-  await csvFile.write(csvHeading);
-  await csvFile.write("\n", {append : true});
-
-  const transpose = data => {
-    for (let i = 0; i < data.length; i++) {
-       for (let j = 0; j < i; j++) {
-          const tmp = data[i][j];
-          data[i][j] = data[j][i];
-          data[j][i] = tmp;
-       };
+  try{
+    console.log("[INFO] Creating CSV file.");
+    let csvFile = await chosenFolder.createFile("variables.csv");
+    let csvHeading = [];
+    for(let i=0;i<folderList.length;i++){
+      csvHeading.push("Image"+(i+1));
     }
- }
-
- transpose(data);
-
-  for(let i = 0;i<data.length;i++){
-    await csvFile.write(data[i], {append : true});
+    await csvFile.write(csvHeading);
     await csvFile.write("\n", {append : true});
+  
+    const transpose = data => {
+      for (let i = 0; i < data.length; i++) {
+         for (let j = 0; j < i; j++) {
+            const tmp = data[i][j];
+            data[i][j] = data[j][i];
+            data[j][i] = tmp;
+         };
+      }
+   }
+  
+   transpose(data);
+  
+    for(let i = 0;i<data.length;i++){
+      await csvFile.write(data[i], {append : true});
+      await csvFile.write("\n", {append : true});
+    }
+    document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] CSV Created.";
+  }catch{
+    document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Something went wrong.";
   }
+
 }
 
 /**
- * assigns functions to the UI buttons.
+ * Assigns functions to the UI buttons.
  */
 function assignFunctions(){
   document.getElementById("create-csv-btn").addEventListener("click", createFolderContentList);
