@@ -115,6 +115,7 @@ function getTime(){
   
 }
 
+
 /**
  * creates and writes lines to CSV
  * @data the data to be written to CSV
@@ -128,6 +129,18 @@ async function writeLines(data){
   }
   await csvFile.write(csvHeading);
   await csvFile.write("\n", {append : true});
+
+  const transpose = data => {
+    for (let i = 0; i < data.length; i++) {
+       for (let j = 0; j < i; j++) {
+          const tmp = data[i][j];
+          data[i][j] = data[j][i];
+          data[j][i] = tmp;
+       };
+    }
+ }
+
+ transpose(data);
 
   for(let i = 0;i<data.length;i++){
     await csvFile.write(data[i], {append : true});
