@@ -37,6 +37,7 @@ async function resetDirectories(){
  * @myFolder current folder
  */
 async function getFolderContents(myFolder){
+  folderContents = [];
   console.log("[INFO] Inside getFolderContents: " + myFolder);
   const entries = await myFolder.getEntries();
   const allFiles = entries.filter(entry => entry.isFile);
@@ -45,22 +46,6 @@ async function getFolderContents(myFolder){
     currentFolder.push(myFolder.name+"/"+allFiles[i].name);
   }
   folderContents.push(currentFolder);
-}
-
-/**
- * loops through list of folders and gets folder contents. Then calls writeLines with collated folderContents.
- */
-function getLinesToWrite(){
-  // console log
-  console.log("[INFO] Inside getLinesToWrite");
-  // loop through folder list and call getFolderContents on each folder
-  for(let i =0;i<folderList.length;i++){
-    getFolderContents(folderList[i]);
-    
-  }
-  // write lines called with folderContents
-  writeLines(folderContents);
-  
 }
 
 /**
@@ -113,12 +98,21 @@ function getTime(){
   return time
 }
 
+
 /**
- * logs and calls getLinesToWrite.
+ * loops through list of folders and gets folder contents. Then calls writeLines with collated folderContents.
  */
-async function writeCSV(){
-  console.log("[INFO] CSV Created.");
-  getLinesToWrite();
+ function createFolderContentList(){
+  // console log
+  console.log("[INFO] Inside createFolderContentList");
+  // loop through folder list and call getFolderContents on each folder
+  for(let i =0;i<folderList.length;i++){
+    getFolderContents(folderList[i]);
+    
+  }
+  // write lines called with folderContents
+  writeLines(folderContents);
+  
 }
 
 /**
@@ -128,22 +122,24 @@ async function writeCSV(){
 async function writeLines(data){
   console.log("[INFO] Creating CSV file.");
   let csvFile = await chosenFolder.createFile("variables.csv");
-  let folderNames = [];
+  let csvHeading = [];
   for(let i=0;i<folderList.length;i++){
-    folderNames.push("Image"+(i+1));
+    csvHeading.push("Image"+(i+1));
   }
-  await csvFile.write(folderNames);
+  await csvFile.write(csvHeading);
   await csvFile.write("\n", {append : true});
-  await csvFile.write(data[0], {append : true});
-  await csvFile.write("\n", {append : true});
-  await csvFile.write(data[1], {append : true});
+
+  for(let i = 0;i<data.length;i++){
+    await csvFile.write(data[i], {append : true});
+    await csvFile.write("\n", {append : true});
+  }
 }
 
 /**
  * assigns functions to the UI buttons.
  */
 function assignFunctions(){
-  document.getElementById("create-csv-btn").addEventListener("click", writeCSV);
+  document.getElementById("create-csv-btn").addEventListener("click", createFolderContentList);
   document.getElementById("pick-directory-btn").addEventListener("click", pickWorkingDirectory);
   document.getElementById("create-directory-btn").addEventListener("click", createImageFolder);
   document.getElementById("reset-directories-btn").addEventListener("click", resetDirectories);
