@@ -147,12 +147,7 @@ async function writeLines(data){
       await csvFile.write("\n", {append : true});
 
     }
-
     
-    // for(let i = 0;i<data.length;i++){
-    //   await csvFile.write(data[i], {append : true});
-    //   await csvFile.write("\n", {append : true});
-    // }
     document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] CSV Created.";
   }catch{
     document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Something went wrong.";
