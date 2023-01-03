@@ -3,7 +3,8 @@ let chosenFolder = "";
 // list of folders for temp images
 let folderList = [];
 // list of content from within each image folder
-let folderContents = [];
+const folderContents = new Array();
+
 
 // uxp definitions
 const fs = require('uxp').storage.localFileSystem;
@@ -45,7 +46,7 @@ async function resetDirectories(){
  * @myFolder current folder
  */
 async function getFolderContents(myFolder){
-  folderContents = [];
+  
   console.log("[INFO] Inside getFolderContents: " + myFolder);
   const entries = await myFolder.getEntries();
   const allFiles = entries.filter(entry => entry.isFile);
@@ -138,23 +139,20 @@ async function writeLines(data){
     }
     await csvFile.write(csvHeading);
     await csvFile.write("\n", {append : true});
-  
-    const transpose = data => {
-      for (let i = 0; i < data.length; i++) {
-         for (let j = 0; j < i; j++) {
-            const tmp = data[i][j];
-            data[i][j] = data[j][i];
-            data[j][i] = tmp;
-         };
-      }
-   }
-  
-   transpose(data);
-  
-    for(let i = 0;i<data.length;i++){
-      await csvFile.write(data[i], {append : true});
+    const folderCount = data.length;
+    const groupedArray = data[0].map((_, i) => data.map(row => row[i]));
+    console.log("[INFO] Beginning for loop for each cluster");
+    for(let i=0;i<groupedArray.length;i++){
+      await csvFile.write(groupedArray[i], {append : true});
       await csvFile.write("\n", {append : true});
+
     }
+
+    
+    // for(let i = 0;i<data.length;i++){
+    //   await csvFile.write(data[i], {append : true});
+    //   await csvFile.write("\n", {append : true});
+    // }
     document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] CSV Created.";
   }catch{
     document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Something went wrong.";
