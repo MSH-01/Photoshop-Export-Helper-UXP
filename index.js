@@ -82,6 +82,9 @@ async function createImageFolder(){
         let folderName = "img"+String(i+1);
         createDirectory(chosenFolder,folderName);
       }
+      createDirectory(chosenFolder, "temp");
+      createDirectory(chosenFolder, "psd");
+      createDirectory(chosenFolder, "output");
       document.getElementById("image-folder-no").value = "";
       document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Folders Successfully Created.";
     }catch{
