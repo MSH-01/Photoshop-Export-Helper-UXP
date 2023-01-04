@@ -79,7 +79,8 @@ async function createImageFolder(){
   }else{
     try{
       for(let i = 0; i<numberOfFolders; i++){
-        createDirectory(chosenFolder,i);
+        let folderName = "img"+String(i+1);
+        createDirectory(chosenFolder,folderName);
       }
       document.getElementById("image-folder-no").value = "";
       document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Folders Successfully Created.";
@@ -90,13 +91,14 @@ async function createImageFolder(){
 }
 
 /**
+ * GENERIC FUNCTION - DON'T CHANGE
  * Creates a new folder with name img + (number in loop).
  * @path where folder will be created
  * @folderName number of folder
  */
 async function createDirectory(path, folderName){
-  folderName = parseInt(folderName) + 1;
-  const myCollectionsFolder = await path.createFolder("img"+folderName);
+  //folderName = parseInt(folderName) + 1;
+  const myCollectionsFolder = await path.createFolder(folderName);
   folderList.push(myCollectionsFolder);
 }
 
