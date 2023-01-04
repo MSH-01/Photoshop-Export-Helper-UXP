@@ -30,8 +30,13 @@ async function resetDirectories(){
         }
         currentFolder.delete();
       }
-      let csvFile = await chosenFolder.getEntry("variables.csv");
-      csvFile.delete();
+      try{
+        let csvFile = await chosenFolder.getEntry("variables.csv");
+        csvFile.delete();
+      }catch{
+        document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Img folders successfully deleted.";
+      }
+
       document.getElementById("warning-lbl").innerHTML = "[" +getTime() + "] Img folders successfully deleted.";
       folderList = [];
 
