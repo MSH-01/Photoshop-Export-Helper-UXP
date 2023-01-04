@@ -119,7 +119,6 @@ function getTime(){
   var today = new Date();
   var minutes = today.getMinutes();
   var formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-
   var time = today.getHours() + ":" + formattedMinutes;
   return time;
 }
