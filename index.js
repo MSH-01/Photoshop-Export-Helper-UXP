@@ -117,8 +117,11 @@ async function createDirectory(path, folderName){
  */
 function getTime(){
   var today = new Date();
-  var time = today.getHours() + ":" + today.getMinutes();
-  return time
+  var minutes = today.getMinutes();
+  var formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+
+  var time = today.getHours() + ":" + formattedMinutes;
+  return time;
 }
 
 /**
