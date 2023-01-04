@@ -4,6 +4,8 @@ let chosenFolder = "";
 let folderList = [];
 // list of content from within each image folder
 const folderContents = new Array();
+const imgFolders = new Array();
+
 
 
 // uxp definitions
@@ -126,7 +128,17 @@ function getTime(){
   // console log
   console.log("[INFO] Inside createFolderContentList");
   // loop through folder list and call getFolderContents on each folder
-  for(let i =0;i<folderList.length;i++){
+
+  for(let i=0;i<folderList.length;i++){
+    let currentFolder = folderList[i].name;
+    if(currentFolder.includes('img')){
+      imgFolders.push(folderList[i]);
+    }
+  }
+
+  console.log(imgFolders);
+
+  for(let i =0;i<imgFolders.length;i++){
     getFolderContents(folderList[i]);
     
   }
@@ -142,14 +154,15 @@ function getTime(){
 async function writeLines(data){
   try{
     console.log("[INFO] Creating CSV file.");
+    const folderCount = imgFolders.length;
     let csvFile = await chosenFolder.createFile("variables.csv");
     let csvHeading = [];
-    for(let i=0;i<folderList.length;i++){
+    for(let i=0;i<folderCount;i++){
       csvHeading.push("Image"+(i+1));
     }
     await csvFile.write(csvHeading);
     await csvFile.write("\n", {append : true});
-    const folderCount = data.length;
+    
     const groupedArray = data[0].map((_, i) => data.map(row => row[i]));
     console.log("[INFO] Beginning for loop for each cluster");
     for(let i=0;i<groupedArray.length;i++){
