@@ -10,7 +10,7 @@ const imgFolders = new Array();
 
 // uxp definitions
 const fs = require('uxp').storage.localFileSystem;
-// const app = require('photoshop').app;
+const app = require('photoshop').app;
 
 
 /**
@@ -26,8 +26,8 @@ async function resetDirectories(){
         console.log("[WARN] Deleting: " + currentFolder.nativePath);
         let currentFolderEntries = await currentFolder.getEntries();
         console.log("[INFO] "+ currentFolderEntries);
-        for(let j = 0;j<currentFolderEntries.length;j++){
-          currentFolderEntries[j].delete();
+        for(const element of currentFolderEntries){
+          element.delete();
           console.log("[INFO] " + currentFolderEntries[i]);
         }
         currentFolder.delete();
@@ -58,8 +58,8 @@ async function getFolderContents(myFolder){
   const entries = await myFolder.getEntries();
   const allFiles = entries.filter(entry => entry.isFile);
   let currentFolder = []
-  for(let i = 0; i<allFiles.length;i++){
-    currentFolder.push(myFolder.name+"/"+allFiles[i].name);
+  for(const element of allFiles){
+    currentFolder.push(myFolder.name+"/"+element.name);
   }
   folderContents.push(currentFolder);
 }
@@ -116,10 +116,10 @@ async function createDirectory(path, folderName){
  * Returns current time.
  */
 function getTime(){
-  var today = new Date();
-  var minutes = today.getMinutes();
-  var formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-  var time = today.getHours() + ":" + formattedMinutes;
+  let today = new Date();
+  let minutes = today.getMinutes();
+  let formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+  let time = today.getHours() + ":" + formattedMinutes;
   return time;
 }
 
@@ -131,10 +131,10 @@ function getTime(){
   console.log("[INFO] Inside createFolderContentList");
   // loop through folder list and call getFolderContents on each folder
 
-  for(let i=0;i<folderList.length;i++){
-    let currentFolder = folderList[i].name;
+  for(const element of folderList){
+    let currentFolder = element.name;
     if(currentFolder.includes('img')){
-      imgFolders.push(folderList[i]);
+      imgFolders.push(element);
     }
   }
 
@@ -167,8 +167,8 @@ async function writeLines(data){
     
     const groupedArray = data[0].map((_, i) => data.map(row => row[i]));
     console.log("[INFO] Beginning for loop for each cluster");
-    for(let i=0;i<groupedArray.length;i++){
-      await csvFile.write(groupedArray[i], {append : true});
+    for(const element of groupedArray){
+      await csvFile.write(element, {append : true});
       await csvFile.write("\n", {append : true});
 
     }
